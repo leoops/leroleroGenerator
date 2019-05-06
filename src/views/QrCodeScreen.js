@@ -78,14 +78,11 @@ class HomeScreen extends Component {
             placeholderTextColor={colors.GRAY}
           />
         </View>
-        <TouchableOpacity
-          style={styles.buttonContainer}
+        <Button
           disabled={textCode === ''}
           onPress={this.handleGenerateButton}
-        >
-          <Text style={styles.buttonText}>Gerar</Text>
-        </TouchableOpacity>
-
+          title="Gerar"
+        />
         {qrCodeValue !== '' && (
           <View onLayout={this.onLayout} style={styles.qrCodeContainer}>
             <View>
@@ -126,13 +123,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   inputContainer: { marginVertical: 10 },
-  buttonContainer: {
-    borderColor: '#000',
-    borderWidth: 1,
-    borderRadius: 20,
-    padding: 10,
-  },
-  buttonText: { alignSelf: 'center' },
   qrCodeContainer: {
     flex: 1,
     paddingTop: 20,
