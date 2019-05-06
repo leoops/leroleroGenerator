@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { saveBase64ToDisk } from '../services/QRCode';
+import { colors } from '../utils/colos';
+import { Input } from '../components';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -25,6 +27,11 @@ class HomeScreen extends Component {
     this.setState({ textCode: text });
   };
 
+  /**
+   * Método de gravação de imagem
+   * @memberof HomeScreen
+   * @param {string} dataURL - código base64 de image
+   */
   saveImage = dataURL => {
     saveBase64ToDisk(dataURL)
       .then(() => {
@@ -61,48 +68,28 @@ class HomeScreen extends Component {
   render = () => {
     const { textCode, qrCodeValue, qrCodeSize, isVisibleSaveIcon } = this.state;
     return (
-      <View style={{ flex: 1, marginHorizontal: 10 }}>
-        <View style={{ marginVertical: 10 }}>
-          <TextInput
-            style={StyleSheet.textInput}
+      <View style={styles.container}>
+        <View style={styles.inputContainer}>
+          <Input
             value={textCode}
             multiline
             onChangeText={this.onChangeText}
             placeholder="Conteúdo"
-            placeholderTextColor="#CCC"
+            placeholderTextColor={colors.GRAY}
           />
         </View>
         <TouchableOpacity
-          style={{
-            borderColor: '#000',
-            borderWidth: 1,
-            borderRadius: 20,
-            padding: 10,
-          }}
+          style={styles.buttonContainer}
           disabled={textCode === ''}
           onPress={this.handleGenerateButton}
         >
-          <Text style={{ alignSelf: 'center' }}>Gerar</Text>
+          <Text style={styles.buttonText}>Gerar</Text>
         </TouchableOpacity>
 
         {qrCodeValue !== '' && (
-          <View
-            onLayout={this.onLayout}
-            style={{
-              flex: 1,
-              paddingTop: 20,
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-            }}
-          >
+          <View onLayout={this.onLayout} style={styles.qrCodeContainer}>
             <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                  marginTop: 10,
-                }}
-              >
+              <View style={styles.qrCodeBar}>
                 {/* Deletar  */}
                 <Icon
                   name="delete"
@@ -132,5 +119,31 @@ class HomeScreen extends Component {
     );
   };
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginHorizontal: 10,
+  },
+  inputContainer: { marginVertical: 10 },
+  buttonContainer: {
+    borderColor: '#000',
+    borderWidth: 1,
+    borderRadius: 20,
+    padding: 10,
+  },
+  buttonText: { alignSelf: 'center' },
+  qrCodeContainer: {
+    flex: 1,
+    paddingTop: 20,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  qrCodeBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+  },
+});
 
 export default HomeScreen;
